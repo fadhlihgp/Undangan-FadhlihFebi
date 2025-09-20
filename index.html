@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Rara & Bima</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <audio id="background-music" loop>
+        <source src="music/janji-suci.mp3" type="audio/mpeg">
+    </audio>
+
+    <section id="cover">
+        <!-- <div class="floating-hearts"> -->
+            <!-- <div class="heart" style="left: 10%; animation-delay: 0s;">💕</div>
+            <div class="heart" style="left: 20%; animation-delay: 3s;">❤️</div>
+            <div class="heart" style="left: 30%; animation-delay: 6s;">💖</div>
+            <div class="heart" style="left: 40%; animation-delay: 1s;">💗</div>
+            <div class="heart" style="left: 50%; animation-delay: 4s;">💝</div>
+            <div class="heart" style="left: 60%; animation-delay: 7s;">💕</div>
+            <div class="heart" style="left: 70%; animation-delay: 2s;">❤️</div>
+            <div class="heart" style="left: 80%; animation-delay: 5s;">💖</div>
+            <div class="heart" style="left: 90%; animation-delay: 8s;">💗</div> -->
+        <!-- </div> -->
+        <p>The Wedding Of</p>
+        <h1>Rara & Bima</h1>
+        <p>Kepada Yth. Bapak/Ibu/Saudara/i</p>
+        <p id="guest-name">Tamu Undangan</p>
+        <button id="open-invitation" class="open-button">
+            <i class="fa-solid fa-envelope-open"></i> Buka Undangan
+        </button>
+    </section>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <ul>
+            <li><a href="#save-date" class="nav-link active">
+                <i class="fa-solid fa-home"></i>
+                <span>Home</span>
+            </a></li>
+            <li><a href="#acara" class="nav-link">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Acara</span>
+            </a></li>
+            <li><a href="#story" class="nav-link">
+                <i class="fa-solid fa-heart"></i>
+                <span>Kisah</span>
+            </a></li>
+            <li><a href="#gallery" class="nav-link">
+                <i class="fa-solid fa-images"></i>
+                <span>Galeri</span>
+            </a></li>
+            <li><a href="#ucapan" class="nav-link">
+                <i class="fa-solid fa-comment-dots"></i>
+                <span>Pesan</span>
+            </a></li>
+            <li><a href="#hadiah" class="nav-link">
+                <i class="fa-solid fa-gift"></i>
+                <span>Hadiah</span>
+            </a></li>
+        </ul>
+    </nav>
+
+    <!-- Music Player -->
+    <div class="music-player" id="musicPlayer">
+        <button class="play-btn" id="playBtn">
+            <i class="fa-solid fa-play" id="playIcon"></i>
+        </button>
+        <div class="music-info">
+            <!-- <div class="music-title">Wedding Song</div>
+            <div class="music-artist">Background Music</div> -->
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/038/812/797/small_2x/ai-generated-beautiful-background-for-giutar-concert-extensions-advertising-free-photo.jpeg" alt="Wedding" class="music-cover-image" id="musicCover">
+        </div>
+        <div class="volume-control" id="volumeControl">
+            <i class="fa-solid fa-volume-up" style="color: white; font-size: 0.8rem;"></i>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+        </div>
+    </div>
+
+    <main id="main-invitation">
+        <!-- Decorative ornaments -->
+        <div class="ornament ornament-1">✦</div>
+        <div class="ornament ornament-2">❋</div>
+        <div class="ornament ornament-3">✧</div>
+        <div class="ornament ornament-4">✦</div>
+        
+        <!-- Save the Date Section -->
+        <section id="save-date" class="save-date-section">
+            <div class="save-date-content">
+                <p class="save-date-label">Save The Date</p>
+                <h1 class="couple-names">Rara & Bima</h1>
+                <p class="wedding-date">15 November 2025</p>
+                <p class="wedding-venue">Jakarta</p>
+                <button class="save-date-button" onclick="addToCalendar()">
+                    <i class="fa-solid fa-calendar-plus"></i> Add to Calendar
+                </button>
+            </div>
+        </section>
+        
+        <section id="mempelai" class="section">
+            <h2 class="section-title animate-on-scroll slide-up">Mempelai</h2>
+            <!-- <p class="section-subtitle animate-on-scroll slide-up">
+                Dengan memohon rahmat dan ridho-Nya, kami bermaksud menyelenggarakan upacara pernikahan putra-putri kami:
+            </p> -->
+            <p class="section-subtitle animate-on-scroll slide-up">
+                Assalamu'alaikum Warahmatullahi Wabarakatuh<br><br>
+                Dengan penuh rasa syukur atas karunia Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu dalam acara pernikahan kami.
+            </p>
+            <div class="couple-container">
+                <div class="couple-profile animate-on-scroll slide-right">
+                    <img src="https://picsum.photos/1280/720?random=6" alt="Rara">
+                    <h2 class="couple-name">Rara Putri</h2>
+                    <p>Putri dari Bapak I Gede Suhartana<br>& Ibu Ni Wayan Sriasih</p>
+                </div>
+                <div class="ampersand animate-on-scroll zoom-in">&</div>
+                <div class="couple-profile animate-on-scroll slide-left">
+                    <img src="https://picsum.photos/1280/720?random=7" alt="Bima">
+                    <h2 class="couple-name">Bima Perkasa</h2>
+                    <p>Putra dari Bapak Drs. H. Muhammad Santoso<br>& Ibu Hj. Siti Aminah</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pembukaan" class="section">
+            <h2 class="section-title animate-on-scroll slide-up">Allah Berfirman</h2>
+            <div class="quote animate-on-scroll slide-up">
+                "Dan diantara tanda-tanda (kebesaran) Allah ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang. Sesungguhnya yang demikian itu benar-benar terdapat tanda-tanda (Kebesaran Allah) bagi kaum yang berfikir."
+            </br>
+                <small>(QS. Ar-Rum: 21)</small>
+            </div>
+        </section>
+
+        <section id="acara" class="section">
+            <h2 class="section-title animate-on-scroll slide-up">Informasi Acara</h2>
+            <div class="event-container">
+                <div class="event-card animate-on-scroll zoom-in">
+                    <h3>Akad Nikah</h3>
+                    <p><i class="fa-solid fa-calendar-days"></i> Sabtu, 15 November 2025</p>
+                    <p><i class="fa-solid fa-clock"></i> Pukul 09.00 - 10.00 WIB</p>
+                    <p><i class="fa-solid fa-map-pin"></i> Masjid Istiqlal, Jakarta</p>
+                </div>
+                <div class="event-card animate-on-scroll zoom-in" style="transition-delay: 0.2s;">
+                    <h3>Resepsi Pernikahan</h3>
+                    <p><i class="fa-solid fa-calendar-days"></i> Sabtu, 15 November 2025</p>
+                    <p><i class="fa-solid fa-clock"></i> Pukul 12.00 - 15.00 WIB</p>
+                    <p><i class="fa-solid fa-map-pin"></i> Balai Kartini, Jakarta</p>
+                    <a href="https://maps.app.goo.gl/u5mGAnW82kHh8A4c6" target="_blank" class="primary-button"><i class="fa-solid fa-location-dot"></i> Lihat Peta</a>
+                </div>
+            </div>
+            <div id="countdown" class="animate-on-scroll slide-up">
+                <div class="time-box"><span id="days">00</span><small>Hari</small></div>
+                <div class="time-box"><span id="hours">00</span><small>Jam</small></div>
+                <div class="time-box"><span id="minutes">00</span><small>Menit</small></div>
+                <div class="time-box"><span id="seconds">00</span><small>Detik</small></div>
+            </div>
+        </section>
+
+        <section id="story" class="section">
+            <h2 class="section-title animate-on-scroll slide-up">Kisah Kami</h2>
+            <div class="story-container">
+                <div class="story-item">
+                    <div class="story-image animate-on-scroll slide-right"><img src="https://picsum.photos/1280/720?random=2" alt="Awal Bertemu"></div>
+                    <div class="story-text animate-on-scroll slide-left">
+                        <h4>Awal Bertemu</h4><small>12 Juni 2021</small>
+                        <p>Di sebuah kedai kopi senja, takdir mempertemukan kami dalam tawa dan cerita yang tak kunjung usai.</p>
+                    </div>
+                </div>
+                <div class="story-item">
+                    <div class="story-image animate-on-scroll slide-left"><img src="https://picsum.photos/1280/720?random=1" alt="Lamaran"></div>
+                    <div class="story-text animate-on-scroll slide-right">
+                        <h4>Lamaran</h4><small>25 Desember 2024</small>
+                        <p>Di bawah langit berbintang, sebuah janji terucap untuk mengarungi sisa hidup dalam satu perahu yang sama.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="section">
+            <h2 class="section-title animate-on-scroll slide-up">Galeri Bahagia</h2>
+            <div class="gallery-grid">
+                <img src="https://picsum.photos/1280/720?random=5" alt="Foto 1" class="animate-on-scroll zoom-in">
+                <img src="https://picsum.photos/1280/720?random=5" alt="Foto 2" class="animate-on-scroll zoom-in" style="transition-delay: 0.1s;">
+                <img src="https://picsum.photos/1280/720?random=5" alt="Foto 3" class="animate-on-scroll zoom-in" style="transition-delay: 0.2s;">
+                <img src="https://picsum.photos/1280/720?random=5" alt="Foto 4" class="animate-on-scroll zoom-in" style="transition-delay: 0.3s;">
+                <img src="https://picsum.photos/1280/720?random=5" alt="Foto 5" class="animate-on-scroll zoom-in" style="transition-delay: 0.4s;">
+                <img src="https://picsum.photos/1280/720?random=5" alt="Foto 6" class="animate-on-scroll zoom-in" style="transition-delay: 0.5s;">
+            </div>
+        </section>
+
+        <section id="ucapan" class="section">
+            <h2 class="section-title animate-on-scroll slide-up">Buku Tamu</h2>
+            <div class="form-and-wishes">
+                <div class="form-container animate-on-scroll slide-right">
+                    <form id="guestbook-form">
+                        <div class="form-group">
+                            <input type="text" id="nama" name="nama" required>
+                            <label for="nama">Nama Anda</label>
+                            <div class="form-feedback" id="nama-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="ucapan_text" name="ucapan_text" required></textarea>
+                            <label for="ucapan_text">Tuliskan Ucapan & Doa</label>
+                            <div class="form-feedback" id="ucapan-feedback"></div>
+                        </div>
+                        <button type="submit" class="primary-button" style="width: 100%;">
+                            <i class="fa-solid fa-paper-plane"></i> Kirim Ucapan
+                        </button>
+                    </form>
+                </div>
+                <div class="wishes-container animate-on-scroll slide-left">
+                    <div class="wishes-list" id="wishes-list">
+                        <!-- Wishes will be populated by JavaScript -->
+                    </div>
+                    <div class="wishes-pagination" id="wishesPagination">
+                        <button class="pagination-btn" id="prevBtn" onclick="changePage(-1)">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <span class="pagination-info" id="pageInfo">Halaman 1 dari 1</span>
+                        <button class="pagination-btn" id="nextBtn" onclick="changePage(1)">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="hadiah" class="section">
+            <h2 class="section-title animate-on-scroll slide-up">Tanda Kasih</h2>
+            <p class="section-subtitle animate-on-scroll slide-up">Doa restu Anda adalah karunia terindah. Namun jika ingin memberikan tanda kasih, kami menyediakan opsi berikut untuk memudahkan Anda.</p>
+            <div class="gift-list">
+                 <div class="gift-card animate-on-scroll zoom-in">
+                    <h4>Amplop Digital</h4>
+                    <img src="https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1280px-BNI_logo.svg.png" alt="BNI Logo">
+                    <p>No. Rek: 1234567890<br>a.n. Rara Putri<button onclick="copyToClipboard('1234567890')">Salin</button></p>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia_logo.svg/2560px-Bank_Central_Asia_logo.svg.png" alt="BCA Logo">
+                    <p>No. Rek: 0987654321<br>a.n. Bima Perkasa<button onclick="copyToClipboard('0987654321')">Salin</button></p>
+                 </div>
+                 <div class="gift-card animate-on-scroll zoom-in" style="transition-delay: 0.2s;">
+                    <h4>Kirim Hadiah</h4>
+                    <p><strong>Penerima: Rara & Bima</strong><br>Jl. Kenangan Indah No. 45, Jakarta Selatan, 12345<br>0812-3456-7890</p>
+                    <button class="primary-button" onclick="copyToClipboard('Rara & Bima, Jl. Kenangan Indah No. 45, Jakarta Selatan, 12345, 081234567890')">Salin Alamat</button>
+                 </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.</p>
+            <br>
+            <h3>Rara & Bima</h3>
+            <p>#RaraBimaBahagia2025</p>
+        </footer>
+
+    </main>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>
