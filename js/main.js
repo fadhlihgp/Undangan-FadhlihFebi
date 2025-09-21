@@ -215,7 +215,10 @@ function addNewWish(author, text, status = "Hadir") {
   displayWishes();
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  // Initialize dynamic content from API
+  await initializeDynamicContent();
+
   // Initialize wishes display
   displayWishes();
 
@@ -358,22 +361,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   window.addEventListener("scroll", handleNavbarScroll);
 
-  // Countdown Timer
-  const countdownDate = new Date("Nov 15, 2025 09:00:00").getTime();
-  const timer = () => {
-    const now = new Date().getTime();
-    const distance = countdownDate - now;
-    if (distance < 0) {
-      document.getElementById("countdown").innerHTML = "ACARA TELAH BERLANGSUNG";
-      return;
-    }
-    document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-    document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
-  };
-  timer();
-  setInterval(timer, 1000);
+  // Countdown Timer - Now handled dynamically in initializeDynamicContent()
+  // const countdownDate = new Date("Nov 15, 2025 09:00:00").getTime();
+  // const timer = () => {
+  //   const now = new Date().getTime();
+  //   const distance = countdownDate - now;
+  //   if (distance < 0) {
+  //     document.getElementById("countdown").innerHTML = "ACARA TELAH BERLANGSUNG";
+  //     return;
+  //   }
+  //   document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+  //   document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  //   document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  //   document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+  // };
+  // timer();
+  // setInterval(timer, 1000);
 
   // Guestbook Form Submission
   const guestbookForm = document.getElementById("guestbook-form");
@@ -503,6 +506,9 @@ document.addEventListener("DOMContentLoaded", function () {
   );
   animatedElements.forEach((element) => observer.observe(element));
 
+  // Store observer globally for dynamic content updates
+  window.scrollAnimationObserver = observer;
+
   // Music player initially hidden
   musicPlayer.style.display = "none";
 });
@@ -521,13 +527,35 @@ function copyToClipboard(text) {
 
 // Add to Calendar function
 function addToCalendar() {
-  const eventDetails = {
-    title: "Wedding of Rara & Bima",
-    start: "20251115T020000Z", // 09:00 WIB = 02:00 UTC
-    end: "20251115T080000Z", // 15:00 WIB = 08:00 UTC
-    description: "Join us for the wedding celebration of Rara & Bima",
-    location: "Masjid Istiqlal & Balai Kartini, Jakarta",
-  };
+  // Use dynamic data if available, otherwise use fallback
+  let eventDetails;
+
+  if (invitationData && invitationData.eventData) {
+    const { generalInformation, eventData, partnerData } = invitationData;
+    const eventDate = new Date(eventData.religiousEvent.eventDate);
+
+    // Convert to UTC for calendar
+    const startUTC = eventDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    const endDate = new Date(eventDate.getTime() + 8 * 60 * 60 * 1000); // Add 8 hours
+    const endUTC = endDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+    eventDetails = {
+      title: generalInformation.title || `Wedding of ${getCoupleNames(partnerData)}`,
+      start: startUTC,
+      end: endUTC,
+      description: `Join us for the wedding celebration of ${getCoupleNames(partnerData)}`,
+      location: eventData.religiousEvent.location || eventData.location.address,
+    };
+  } else {
+    // Fallback data
+    eventDetails = {
+      title: "Wedding of Rara & Bima",
+      start: "20251115T020000Z", // 09:00 WIB = 02:00 UTC
+      end: "20251115T080000Z", // 15:00 WIB = 08:00 UTC
+      description: "Join us for the wedding celebration of Rara & Bima",
+      location: "Masjid Istiqlal & Balai Kartini, Jakarta",
+    };
+  }
 
   // Google Calendar URL
   const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(

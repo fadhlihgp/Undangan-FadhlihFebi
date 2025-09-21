@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Wedding of Rara & Bima</title>
     
+    <!-- 
+    ============================================================================
+    DYNAMIC WEDDING INVITATION
+    ============================================================================
+    
+    This invitation is now configured to fetch data dynamically from API:
+    
+    API Endpoint: https://localhost:7077/api/v1/invitation/the-wedding-of-fadhlih-%26-febiana/all-data
+    
+    Features:
+    - Dynamic content loading from API
+    - Fallback to static data if API fails
+    - Responsive design with animations
+    - Background music and interactive elements
+    
+    API Data Structure:
+    - generalInformation: Title, date, theme
+    - coverOpening: Images and opening text
+    - partnerData: Couple information and photos
+    - eventData: Event details, verses, location
+    - stories: Love story timeline
+    - galleries: Photo gallery
+    - gift: Bank details and gift options
+    - closing: Footer content
+    
+    Files:
+    - js/api.js: API handling and data fetching
+    - js/dynamic-content.js: DOM manipulation with API data
+    - js/main.js: Main application logic
+    - css/style.css: Responsive styling
+    
+    Note: If API is unavailable, the invitation will use fallback static data
+    to ensure the invitation always works.
+    ============================================================================
+    -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -14,6 +50,36 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+    <!-- Enhanced Loading Overlay with Error Handling -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <!-- Loading State -->
+        <div class="loading-container" id="loadingContainer">
+            <div class="loading-spinner">
+                <div class="loading-hearts">💕</div>
+            </div>
+            <div class="loading-text" id="loadingText">Memuat undangan spesial...</div>
+            <div class="loading-subtitle">Mohon tunggu sebentar</div>
+        </div>
+        
+        <!-- Error State -->
+        <div class="error-container" id="errorContainer">
+            <div class="error-icon">⚠️</div>
+            <h3 class="error-title">Oops! Terjadi Kesalahan</h3>
+            <p class="error-message" id="errorMessage">
+                Tidak dapat memuat data undangan. Pastikan koneksi internet Anda stabil.
+            </p>
+            <div class="error-actions">
+                <button class="refresh-button" id="refreshButton" onclick="retryLoadingData()">
+                    <i class="fa-solid fa-refresh"></i>
+                    Coba Lagi
+                </button>
+                <button class="fallback-button" id="fallbackButton" onclick="proceedWithFallback()">
+                    Lanjutkan Tanpa Data
+                </button>
+            </div>
+        </div>
+    </div>
 
     <audio id="background-music" loop>
         <source src="music/janji-suci.mp3" type="audio/mpeg">
@@ -258,11 +324,6 @@
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia_logo.svg/2560px-Bank_Central_Asia_logo.svg.png" alt="BCA Logo">
                     <p>No. Rek: 0987654321<br>a.n. Bima Perkasa<button onclick="copyToClipboard('0987654321')">Salin</button></p>
                  </div>
-                 <div class="gift-card animate-on-scroll zoom-in" style="transition-delay: 0.2s;">
-                    <h4>Kirim Hadiah</h4>
-                    <p><strong>Penerima: Rara & Bima</strong><br>Jl. Kenangan Indah No. 45, Jakarta Selatan, 12345<br>0812-3456-7890</p>
-                    <button class="primary-button" onclick="copyToClipboard('Rara & Bima, Jl. Kenangan Indah No. 45, Jakarta Selatan, 12345, 081234567890')">Salin Alamat</button>
-                 </div>
             </div>
         </section>
         
@@ -275,6 +336,8 @@
 
     </main>
     
+    <script src="js/api.js"></script>
+    <script src="js/dynamic-content.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
