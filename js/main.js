@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const navLinks = document.querySelectorAll(".nav-link");
   const sections = document.querySelectorAll(".section");
 
-  // Smooth scrolling for navigation
+  // Smooth scrolling for navigation with animation reset
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
@@ -317,10 +317,22 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (targetSection) {
         const offsetTop = targetSection.offsetTop - 20; // Account for bottom navbar
+
+        // Reset animations before scrolling
+        const animatedElements = document.querySelectorAll(".animate-on-scroll");
+        animatedElements.forEach((element) => {
+          element.classList.remove("is-visible");
+        });
+
         window.scrollTo({
           top: offsetTop,
           behavior: "smooth",
         });
+
+        // Reinitialize animations after scroll completes
+        setTimeout(() => {
+          window.reinitializeAnimations();
+        }, 800); // Wait for smooth scroll to complete
       }
     });
   });
@@ -492,22 +504,71 @@ document.addEventListener("DOMContentLoaded", async function () {
     }, 1000);
   });
 
-  // Scroll Animations
+  // Scroll Animations with Repeatable Effects
   const animatedElements = document.querySelectorAll(".animate-on-scroll");
+
+  // Create a more sophisticated observer for repeatable animations
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          // Element is entering viewport - add animation
           entry.target.classList.add("is-visible");
+        } else {
+          // Element is leaving viewport - remove animation for repeat effect
+          entry.target.classList.remove("is-visible");
         }
       });
     },
-    { threshold: 0.15 }
+    {
+      threshold: 0.15,
+      rootMargin: "0px 0px -10% 0px", // Start animation slightly before element is fully visible
+    }
   );
+
   animatedElements.forEach((element) => observer.observe(element));
 
   // Store observer globally for dynamic content updates
   window.scrollAnimationObserver = observer;
+
+  // Function to reinitialize animations for dynamically added content
+  window.reinitializeAnimations = function () {
+    // Disconnect existing observer
+    if (window.scrollAnimationObserver) {
+      window.scrollAnimationObserver.disconnect();
+    }
+
+    // Get all animated elements (including newly added ones)
+    const allAnimatedElements = document.querySelectorAll(".animate-on-scroll");
+
+    // Reset all elements to initial state
+    allAnimatedElements.forEach((element) => {
+      element.classList.remove("is-visible");
+    });
+
+    // Create new observer
+    const newObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          } else {
+            entry.target.classList.remove("is-visible");
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    // Observe all elements
+    allAnimatedElements.forEach((element) => newObserver.observe(element));
+
+    // Update global reference
+    window.scrollAnimationObserver = newObserver;
+  };
 
   // Music player initially hidden
   musicPlayer.style.display = "none";

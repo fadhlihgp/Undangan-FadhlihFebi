@@ -140,6 +140,11 @@ function updateMempelaiSection(data) {
         manParents.innerHTML = `Putra dari Bapak ${partnerData.man.fatherName}<br>& Ibu ${partnerData.man.motherName}`;
       }
     }
+
+    // Reinitialize animations for this section
+    setTimeout(() => {
+      reinitializeSectionAnimations("mempelai");
+    }, 100);
   } catch (error) {
     console.error("Error updating mempelai section:", error);
   }
@@ -246,6 +251,11 @@ function updateEventSection(data) {
         }
       }
     }
+
+    // Reinitialize animations for this section
+    setTimeout(() => {
+      reinitializeSectionAnimations("acara");
+    }, 100);
   } catch (error) {
     console.error("Error updating event section:", error);
   }
@@ -332,6 +342,11 @@ function updateStorySection(data) {
     } else {
       console.log("No story data available, keeping existing content");
     }
+
+    // Reinitialize animations for this section
+    setTimeout(() => {
+      reinitializeSectionAnimations("story");
+    }, 100);
   } catch (error) {
     console.error("Error updating story section:", error);
   }
@@ -385,6 +400,11 @@ function updateGallerySection(data) {
         }, 100);
       }
     }
+
+    // Reinitialize animations for this section
+    setTimeout(() => {
+      reinitializeSectionAnimations("gallery");
+    }, 100);
   } catch (error) {
     console.error("Error updating gallery section:", error);
   }
@@ -520,6 +540,56 @@ function getBankLogoUrl(bankName) {
   return bankLogos[bankName] || "https://via.placeholder.com/200x60?text=" + encodeURIComponent(bankName);
 }
 
+/**
+ * Reinitialize animations for a specific section after content update
+ * @param {string} sectionId - ID of the section to reinitialize
+ */
+function reinitializeSectionAnimations(sectionId) {
+  try {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      // Get all animated elements in this section
+      const animatedElements = section.querySelectorAll(".animate-on-scroll");
+
+      // Reset animation states
+      animatedElements.forEach((element) => {
+        element.classList.remove("is-visible");
+
+        // Re-observe with the global observer if it exists
+        if (window.scrollAnimationObserver) {
+          window.scrollAnimationObserver.observe(element);
+        }
+      });
+
+      console.log(`Reinitialized animations for section: ${sectionId}`);
+    }
+  } catch (error) {
+    console.error(`Error reinitializing animations for section ${sectionId}:`, error);
+  }
+}
+
+/**
+ * Trigger animations for currently visible sections
+ */
+function triggerVisibleAnimations() {
+  try {
+    const animatedElements = document.querySelectorAll(".animate-on-scroll");
+
+    animatedElements.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight * 0.85 && rect.bottom > 0;
+
+      if (isVisible) {
+        element.classList.add("is-visible");
+      } else {
+        element.classList.remove("is-visible");
+      }
+    });
+  } catch (error) {
+    console.error("Error triggering visible animations:", error);
+  }
+}
+
 // Make functions available globally
 window.dynamicContent = {
   updateCoverSection,
@@ -532,4 +602,6 @@ window.dynamicContent = {
   updateGiftSection,
   updateFooterSection,
   initializeCountdown,
+  reinitializeSectionAnimations,
+  triggerVisibleAnimations,
 };

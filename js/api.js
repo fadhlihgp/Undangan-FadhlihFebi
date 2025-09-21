@@ -476,6 +476,13 @@ async function initializeDynamicContent() {
 
       // Hide loading state after successful load
       hideLoadingState();
+
+      // Trigger animations for visible sections after all content is loaded
+      setTimeout(() => {
+        if (window.dynamicContent && window.dynamicContent.triggerVisibleAnimations) {
+          window.dynamicContent.triggerVisibleAnimations();
+        }
+      }, 200);
     } else {
       throw new Error("No data received from API");
     }

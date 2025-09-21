@@ -481,6 +481,8 @@ body::before {
   letter-spacing: 2px;
   text-transform: uppercase;
   opacity: 0.9;
+  font-size: 1rem;
+  margin-top: 2rem;
 }
 
 .save-date-section .couple-names {
@@ -1908,26 +1910,106 @@ body::before {
   }
 }
 
+/* Enhanced Scroll Animations with Repeatable Effects */
 .animate-on-scroll {
   opacity: 0;
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
 }
+
 .animate-on-scroll.slide-up {
-  transform: translateY(50px);
+  transform: translateY(60px);
 }
+
 .animate-on-scroll.slide-left {
-  transform: translateX(-50px);
+  transform: translateX(-60px);
 }
+
 .animate-on-scroll.slide-right {
-  transform: translateX(50px);
+  transform: translateX(60px);
 }
+
 .animate-on-scroll.zoom-in {
-  transform: scale(0.9);
+  transform: scale(0.8);
 }
 
 .animate-on-scroll.is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* Stagger animation delays for multiple elements */
+.animate-on-scroll:nth-child(1) {
+  transition-delay: 0ms;
+}
+.animate-on-scroll:nth-child(2) {
+  transition-delay: 100ms;
+}
+.animate-on-scroll:nth-child(3) {
+  transition-delay: 200ms;
+}
+.animate-on-scroll:nth-child(4) {
+  transition-delay: 300ms;
+}
+.animate-on-scroll:nth-child(5) {
+  transition-delay: 400ms;
+}
+.animate-on-scroll:nth-child(6) {
+  transition-delay: 500ms;
+}
+
+/* Special animations for specific sections */
+.gallery-grid .animate-on-scroll.is-visible {
+  animation: zoomInBounce 0.6s ease-out forwards;
+}
+
+.story-item .animate-on-scroll.is-visible {
+  animation: slideInWithBounce 0.8s ease-out forwards;
+}
+
+.event-card.animate-on-scroll.is-visible {
+  animation: cardReveal 0.7s ease-out forwards;
+}
+
+@keyframes zoomInBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInWithBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) rotateX(15deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
 }
 
 /* Decorative elements */
@@ -2201,11 +2283,6 @@ body::before {
 
   .wedding-date {
     font-size: 1.8rem;
-  }
-
-  .save-date-label {
-    font-size: 1rem;
-    margin-top: 2rem;
   }
 
   .save-date-button {
