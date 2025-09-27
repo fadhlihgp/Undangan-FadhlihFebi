@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Wedding of Rara & Bima</title>
+    <title>The Wedding Fadhlih & Febiana</title>
     
     <!-- 
     ============================================================================
@@ -98,7 +98,7 @@
             <div class="heart" style="left: 90%; animation-delay: 8s;">💗</div> -->
         <!-- </div> -->
         <p>The Wedding Of</p>
-        <h1>Rara & Bima</h1>
+        <h1>Fadhlih & Febiana</h1>
         <p>Kepada Yth. Bapak/Ibu/Saudara/i</p>
         <p id="guest-name">Tamu Undangan</p>
         <button id="open-invitation" class="open-button">
@@ -112,6 +112,10 @@
             <li><a href="#save-date" class="nav-link active">
                 <i class="fa-solid fa-home"></i>
                 <span>Home</span>
+            </a></li>
+            <li><a href="#mempelai" class="nav-link">
+                <i class="fa-solid fa-user-group"></i>
+                <span>Mempelai</span>
             </a></li>
             <li><a href="#acara" class="nav-link">
                 <i class="fa-solid fa-calendar-days"></i>
@@ -163,7 +167,7 @@
         <section id="save-date" class="save-date-section">
             <div class="save-date-content">
                 <p class="save-date-label">Save The Date</p>
-                <h1 class="couple-names">Rara & Bima</h1>
+                <h1 class="couple-names">Fadhlih & Febiana</h1>
                 
                 <!-- Couple Profile Photo -->
                 <div class="home-couple-photo">
@@ -178,10 +182,10 @@
                     </div>
                 </div>
                 
-                <p class="wedding-date">15 November 2025</p>
-                <p class="wedding-venue">Jakarta</p>
+                <p class="wedding-date">29 Desember 2025</p>
+                <p class="wedding-venue">Wonogiri</p>
                 <button class="save-date-button" onclick="addToCalendar()">
-                    <i class="fa-solid fa-calendar-plus"></i> Add to Calendar
+                    <i class="fa-solid fa-calendar-plus"></i> Tambah ke Kalender
                 </button>
             </div>
         </section>
@@ -197,15 +201,15 @@
             </p>
             <div class="couple-container">
                 <div class="couple-profile animate-on-scroll slide-right">
-                    <img src="https://picsum.photos/1280/720?random=6" alt="Rara">
-                    <h2 class="couple-name">Rara Putri</h2>
-                    <p>Putri dari Bapak I Gede Suhartana<br>& Ibu Ni Wayan Sriasih</p>
+                    <img src="https://picsum.photos/1280/720?random=6" alt="febiana">
+                    <h2 class="couple-name">Febiana Ambar Lestari</h2>
+                    <p>Putri dari Bapak Marijo<br>& Ibu Heni</p>
                 </div>
                 <div class="ampersand animate-on-scroll zoom-in">&</div>
                 <div class="couple-profile animate-on-scroll slide-left">
-                    <img src="https://picsum.photos/1280/720?random=7" alt="Bima">
+                    <img src="https://picsum.photos/1280/720?random=7" alt="fadhlih">
                     <h2 class="couple-name">Bima Perkasa</h2>
-                    <p>Putra dari Bapak Drs. H. Muhammad Santoso<br>& Ibu Hj. Siti Aminah</p>
+                    <p>Putra dari Bapak Parno<br>& Ibu Nengsih</p>
                 </div>
             </div>
         </section>
@@ -284,8 +288,31 @@
                         <div class="form-group">
                             <input type="text" id="nama" name="nama" required>
                             <label for="nama">Nama Anda</label>
+                            <small class="input-hint">Sudah terisi otomatis, dapat diubah jika diperlukan</small>
                             <div class="form-feedback" id="nama-feedback"></div>
                         </div>
+                        
+                        <div class="form-group">
+                            <div class="attendance-group-simple">
+                                <span class="attendance-title">Konfirmasi Kehadiran</span>
+                                <div class="attendance-simple-options">
+                                    <label>
+                                        <input type="radio" name="attendance" value="Hadir" required>
+                                        <span>Hadir</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="attendance" value="Tidak Hadir" required>
+                                        <span>Tidak Hadir</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="attendance" value="Ragu" required>
+                                        <span>Ragu</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-feedback" id="attendance-feedback"></div>
+                        </div>
+                        
                         <div class="form-group">
                             <textarea id="ucapan_text" name="ucapan_text" required></textarea>
                             <label for="ucapan_text">Tuliskan Ucapan & Doa</label>
@@ -319,19 +346,25 @@
             <div class="gift-list">
                  <div class="gift-card animate-on-scroll zoom-in">
                     <h4>Amplop Digital</h4>
-                    <img src="https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1280px-BNI_logo.svg.png" alt="BNI Logo">
-                    <p>No. Rek: 1234567890<br>a.n. Rara Putri<button onclick="copyToClipboard('1234567890')">Salin</button></p>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia_logo.svg/2560px-Bank_Central_Asia_logo.svg.png" alt="BCA Logo">
-                    <p>No. Rek: 0987654321<br>a.n. Bima Perkasa<button onclick="copyToClipboard('0987654321')">Salin</button></p>
+                    <div class="bank-account">
+                        <i class="fa-solid fa-university" style="font-size: 2rem; color: var(--color-gold); margin-bottom: 0.5rem;"></i>
+                        <p><strong>BNI</strong></p>
+                        <p>No. Rek: 1234567890<br>a.n. Rara Putri<button onclick="copyToClipboard('1234567890')">Salin</button></p>
+                    </div>
+                    <div class="bank-account" style="margin-top: 1.5rem;">
+                        <i class="fa-solid fa-credit-card" style="font-size: 2rem; color: var(--color-gold); margin-bottom: 0.5rem;"></i>
+                        <p><strong>BCA</strong></p>
+                        <p>No. Rek: 0987654321<br>a.n. Bima Perkasa<button onclick="copyToClipboard('0987654321')">Salin</button></p>
+                    </div>
                  </div>
             </div>
         </section>
         
         <footer>
-            <p>Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.</p>
+            <p class="closing-text">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.</p>
             <br>
-            <h3>Rara & Bima</h3>
-            <p>#RaraBimaBahagia2025</p>
+            <h3>Fadhlih & Febiana</h3>
+            <p>#FadhlihFebianaBahagia2025</p>
         </footer>
 
     </main>

@@ -1,127 +1,10 @@
 // Wishes/Comments data and pagination
-let allWishes = [
-  {
-    author: "Rina & Doni",
-    text: "Selamat Rara & Bima! Semoga menjadi keluarga samawa, cepat diberi momongan ya!",
-    status: "Hadir",
-  },
-  {
-    author: "Bapak Sutrisno",
-    text: "Selamat menempuh hidup baru, semoga langgeng hingga akhir hayat.",
-    status: "Hadir",
-  },
-  { author: "Andi Wijaya", text: "Congrats bro! Akhirnya pecah telor juga. Lancar sampai hari H!", status: "Hadir" },
-  {
-    author: "Siti Nurhaliza",
-    text: "Masya Allah, ikut bahagia. Semoga pernikahannya diberkahi Allah SWT. Mohon maaf belum bisa hadir.",
-    status: "Tidak Hadir",
-  },
-  { author: "Dewi Lestari", text: "Selamat yaa kalian berdua, pasangan favoritku! Bahagia selalu.", status: "Hadir" },
-  {
-    author: "Ahmad Rahman",
-    text: "Barakallahu laka wa baraka alaika wa jama'a bainakuma fi khair. Semoga berkah selalu!",
-    status: "Hadir",
-  },
-  {
-    author: "Sari Indah",
-    text: "Alhamdulillah akhirnya kalian menikah juga. Selamat ya, semoga bahagia dunia akhirat.",
-    status: "Hadir",
-  },
-  {
-    author: "Yoga Pratama",
-    text: "Selamat buat kalian berdua! Semoga menjadi keluarga yang harmonis dan diberkahi Allah.",
-    status: "Tidak Hadir",
-  },
-  {
-    author: "Ibu Retno",
-    text: "Selamat menempuh hidup baru nak. Semoga menjadi keluarga yang sakinah mawaddah warahmah.",
-    status: "Hadir",
-  },
-  {
-    author: "Farhan & Maya",
-    text: "Congratulations! Kalian couple goals banget. Semoga langgeng sampai maut memisahkan.",
-    status: "Hadir",
-  },
-  {
-    author: "Pak RT",
-    text: "Selamat ya Rara dan Bima. Sebagai tetangga, saya ikut bahagia. Semoga rukun selalu.",
-    status: "Hadir",
-  },
-  {
-    author: "Teman Kuliah",
-    text: "Masya Allah, dari jaman kuliah udah keliatan cocok. Selamat ya, semoga bahagia!",
-    status: "Tidak Hadir",
-  },
-  {
-    author: "Keluarga Besar",
-    text: "Alhamdulillah, akhirnya ada yang nikah di keluarga kita. Selamat ya!",
-    status: "Hadir",
-  },
-  {
-    author: "Sahabat SMA",
-    text: "Dari SMA udah tau kalian jodoh. Selamat ya! Jangan lupa undang pas 7 bulanan.",
-    status: "Hadir",
-  },
-  {
-    author: "Tim Kerja",
-    text: "Selamat dari tim kantor! Semoga bisa tetap produktif setelah menikah hehe.",
-    status: "Tidak Hadir",
-  },
-  {
-    author: "Guru Ngaji",
-    text: "Barakallahu fiikum. Semoga menjadi keluarga yang istiqomah dan diberkahi Allah SWT.",
-    status: "Hadir",
-  },
-  {
-    author: "Tetangga Sebelah",
-    text: "Selamat ya nak Rara dan Bima. Kalian pasangan yang manis. Semoga langgeng!",
-    status: "Hadir",
-  },
-  {
-    author: "Komunitas Motor",
-    text: "Selamat bro Bima! Jangan lupa touring bareng setelah honeymoon ya!",
-    status: "Hadir",
-  },
-  {
-    author: "Teman Arisan Ibu",
-    text: "Anaknya Ibu Sriasih cantik banget. Selamat ya bu, semoga menjadi menantu yang baik.",
-    status: "Hadir",
-  },
-  {
-    author: "Sepupu Jauh",
-    text: "Selamat dari Jogja! Maaf tidak bisa hadir, tapi doa selalu menyertai kalian.",
-    status: "Tidak Hadir",
-  },
-  {
-    author: "Teman Gym",
-    text: "Bro Bima akhirnya settle down! Selamat ya, semoga istri gak protes kalau masih gym terus.",
-    status: "Hadir",
-  },
-  {
-    author: "Alumni Pesantren",
-    text: "Barakallahu laka. Semoga Allah memberikan keturunan yang sholeh dan sholeha.",
-    status: "Hadir",
-  },
-  {
-    author: "Rekan Bisnis",
-    text: "Selamat mas Bima dan mbak Rara! Semoga bisnis dan rumah tangga sama-sama lancar.",
-    status: "Tidak Hadir",
-  },
-  {
-    author: "Tetangga Kos",
-    text: "Selamat ya! Seneng banget lihat kalian akhirnya menikah. Jangan lupa traktir!",
-    status: "Hadir",
-  },
-  {
-    author: "Guru SD",
-    text: "Rara murid yang baik dari kecil. Selamat ya nak, semoga menjadi istri yang sholehah.",
-    status: "Hadir",
-  },
-];
+let allWishes = []; // Will be populated from API
+let isLoadingComments = false;
 
 let currentPage = 1;
-const wishesPerPage = 5;
-let totalPages = Math.ceil(allWishes.length / wishesPerPage);
+const wishesPerPage = 10;
+let totalPages = 1;
 
 function displayWishes() {
   const startIndex = (currentPage - 1) * wishesPerPage;
@@ -150,12 +33,24 @@ function displayWishes() {
         const wishText = wish.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         const statusText = wish.status.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+        const statusStyle = getAttendanceStatusStyle(wish.status);
+
+        // Format date if available
+        let dateDisplay = "";
+        if (wish.date) {
+          const formattedDate = window.invitationAPI.formatCommentDate(wish.date);
+          dateDisplay = `<div class="wish-date">${formattedDate}</div>`;
+        }
+
         wishDiv.innerHTML = `
-                            <strong>${authorText}</strong>
-                            <p>"${wishText}"</p>
-                            <small>Status: <span style="color: ${
-                              wish.status === "Hadir" ? "var(--color-gold)" : "var(--color-text)"
-                            }; font-weight: 600;">${statusText}</span></small>
+                            <div class="wish-header">
+                              <strong>${authorText}</strong>
+                              ${dateDisplay}
+                            </div>
+                            <p class="wish-text">"${wishText}"</p>
+                            <small class="wish-status">Status: <span style="color: ${statusStyle.color}; font-weight: 600;">
+                              ${statusStyle.icon} ${statusText}
+                            </span></small>
                         `;
         wishesContainer.appendChild(wishDiv);
       });
@@ -208,25 +103,304 @@ function changePage(direction) {
   }
 }
 
-function addNewWish(author, text, status = "Hadir") {
-  allWishes.unshift({ author, text, status });
-  totalPages = Math.ceil(allWishes.length / wishesPerPage);
-  currentPage = 1; // Go to first page to see the new wish
-  displayWishes();
+async function addNewWish(author, text, status = "Hadir") {
+  try {
+    // Post to API
+    const commentData = {
+      name: author,
+      commentText: text,
+      status: status,
+    };
+
+    const response = await window.invitationAPI.postComment(commentData);
+
+    if (response) {
+      console.log("Comment posted successfully");
+
+      // Reload comments from API to get the latest data with correct timestamps
+      // This prevents duplicates and ensures we have the correct server timestamp
+      await loadCommentsFromAPI();
+    }
+  } catch (error) {
+    console.error("Error posting comment:", error);
+
+    // Fallback: add to local array only if API fails
+    const newWish = {
+      author,
+      text,
+      status,
+      date: new Date().toISOString(),
+      id: Date.now().toString(),
+    };
+
+    allWishes.unshift(newWish);
+    totalPages = Math.ceil(allWishes.length / wishesPerPage);
+    currentPage = 1;
+    displayWishes();
+    updatePagination();
+
+    // Show user-friendly error message
+    showFormFeedback("ucapan", "Ucapan tersimpan lokal (koneksi terbatas)", "success");
+    throw error; // Re-throw to handle in form submission
+  }
+}
+
+// Global variable to store guest information
+let currentGuest = null;
+
+/**
+ * Extract guest name from URL path
+ * Supports both query parameter (?to=name) and path (/guest-name)
+ */
+function extractGuestFromURL() {
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Try different parameter names
+    let guest = urlParams.get("to") || urlParams.get("guest") || urlParams.get("name");
+
+    if (guest) {
+      return guest
+        .replace(/[-_]/g, " ")
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(" ");
+    }
+
+    // Then try path-based guest name
+    const path = window.location.pathname;
+    const pathSegments = path.split("/").filter((segment) => segment.length > 0);
+
+    // Look for guest name in path (last segment that's not index.html)
+    if (pathSegments.length > 0) {
+      const lastSegment = pathSegments[pathSegments.length - 1];
+
+      // Skip if it's index.html or contains file extensions
+      if (lastSegment && lastSegment !== "index.html" && !lastSegment.includes(".") && lastSegment.length > 0) {
+        // Convert kebab-case or underscore to proper name
+        const guestName = lastSegment
+          .replace(/[-_]/g, " ")
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(" ");
+
+        return guestName;
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error extracting guest name:", error);
+    return null;
+  }
+}
+
+/**
+ * Validate guest name and show appropriate page
+ */
+function validateAndSetGuest() {
+  const guestName = extractGuestFromURL();
+
+  if (guestName && guestName.trim().length > 0) {
+    currentGuest = guestName.trim();
+
+    // Update guest name display
+    const guestNameElement = document.getElementById("guest-name");
+    if (guestNameElement) {
+      guestNameElement.innerText = currentGuest;
+    }
+
+    // Auto-fill form name field
+    const nameInput = document.getElementById("nama");
+    if (nameInput) {
+      nameInput.value = currentGuest;
+      nameInput.classList.add("valid");
+    }
+
+    console.log("Guest validated:", currentGuest);
+    return true;
+  } else {
+    // Check if we're in development mode and show helpful message
+    const isDevelopment =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname === "";
+
+    if (isDevelopment) {
+      console.warn("Development mode detected. Use query parameters for guest access.");
+      console.info("Example: " + window.location.origin + "/?guest=arya");
+    }
+
+    // Show invalid guest page
+    showInvalidGuestPage();
+    return false;
+  }
+}
+
+/**
+ * Show invalid guest page
+ */
+function showInvalidGuestPage() {
+  document.body.innerHTML = `
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tamu Tidak Valid - Wedding Invitation</title>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .error-container {
+                background: white;
+                padding: 3rem 2rem;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                text-align: center;
+                max-width: 500px;
+                width: 90%;
+            }
+            
+            .error-icon {
+                font-size: 4rem;
+                color: #e74c3c;
+                margin-bottom: 1rem;
+            }
+            
+            .error-title {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 2rem;
+                color: #2c3e50;
+                margin-bottom: 1rem;
+            }
+            
+            .error-message {
+                color: #7f8c8d;
+                line-height: 1.6;
+                margin-bottom: 2rem;
+            }
+            
+            .error-actions {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .btn {
+                padding: 12px 24px;
+                border: none;
+                border-radius: 50px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            
+            .btn-primary {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+            
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            }
+            
+            .btn-secondary {
+                background: #ecf0f1;
+                color: #2c3e50;
+            }
+            
+            .btn-secondary:hover {
+                background: #d5dbdb;
+            }
+            
+            .example-list {
+                text-align: left;
+                background: #f8f9fa;
+                padding: 1rem;
+                border-radius: 10px;
+                margin: 1rem 0;
+            }
+            
+            .example-list li {
+                margin: 0.5rem 0;
+                color: #6c757d;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            <h1 class="error-title">Tamu Tidak Valid</h1>
+            <div class="error-message">
+                <p>Maaf, nama tamu tidak ditemukan atau URL tidak valid.</p>
+                <p>Untuk mengakses undangan, gunakan format URL yang benar:</p>
+                
+                <div class="example-list">
+                    <strong>Contoh URL yang benar:</strong>
+                    <ul>
+                        <li><code>yoursite.com?guest=andi-arya</code></li>
+                        <li><code>yoursite.com?to=siti-nurhaliza</code></li>
+                        <li><code>yoursite.com/index.html?guest=john-doe</code></li>
+                    </ul>
+                    <br>
+                    <small><strong>Untuk pengembang:</strong> Jika menggunakan Live Server, gunakan format query parameter (?guest=nama) karena Live Server tidak mendukung client-side routing.</small>
+                </div>
+                
+                <p>Silakan hubungi penyelenggara untuk mendapatkan link undangan yang benar.</p>
+            </div>
+            
+            <div class="error-actions">
+                <button class="btn btn-primary" onclick="window.location.reload()">
+                    <i class="fa-solid fa-refresh"></i>
+                    Coba Lagi
+                </button>
+                <button class="btn btn-secondary" onclick="history.back()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Kembali
+                </button>
+            </div>
+        </div>
+    </body>
+    </html>
+  `;
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
+  // Validate guest first before initializing anything
+  if (!validateAndSetGuest()) {
+    return; // Stop execution if guest is invalid
+  }
+
   // Initialize dynamic content from API
   await initializeDynamicContent();
 
-  // Initialize wishes display
-  displayWishes();
+  // Load comments from API
+  await loadCommentsFromAPI();
 
-  // Get Guest Name from URL Parameter
-  const urlParams = new URLSearchParams(window.location.search);
-  const guest = urlParams.get("to");
-  if (guest) {
-    document.getElementById("guest-name").innerText = guest.replace(/_/g, " ");
+  // Initialize wishes display (will be called by loadCommentsFromAPI)
+  if (allWishes.length === 0) {
+    displayWishes(); // Show empty state if no comments loaded
   }
 
   // Elements
@@ -394,12 +568,24 @@ document.addEventListener("DOMContentLoaded", async function () {
   const guestbookForm = document.getElementById("guestbook-form");
   const nameInput = document.getElementById("nama");
   const wishInput = document.getElementById("ucapan_text");
-  const submitBtn = guestbookForm.querySelector('button[type="submit"]');
+  const submitBtn = guestbookForm ? guestbookForm.querySelector('button[type="submit"]') : null;
+
+  // Check if all required form elements exist
+  if (!guestbookForm || !nameInput || !wishInput || !submitBtn) {
+    console.error("Required form elements not found");
+    return;
+  }
 
   // Form validation function
   function validateForm() {
+    if (!nameInput || !wishInput) {
+      console.error("Form inputs not found during validation");
+      return false;
+    }
+
     const name = nameInput.value.trim();
     const wish = wishInput.value.trim();
+    const selectedAttendanceRadio = document.querySelector('input[name="attendance"]:checked');
     let isValid = true;
 
     // Clear previous feedback
@@ -410,15 +596,20 @@ document.addEventListener("DOMContentLoaded", async function () {
       group.classList.remove("success", "error");
     });
 
-    // Validate name
+    // Validate name (should be auto-filled and readonly)
     if (!name) {
-      showFormFeedback("nama", "Nama harus diisi", "error");
-      isValid = false;
-    } else if (name.length < 2) {
-      showFormFeedback("nama", "Nama minimal 2 karakter", "error");
+      showFormFeedback("nama", "Nama tidak valid", "error");
       isValid = false;
     } else {
       showFormFeedback("nama", "Nama valid", "success");
+    }
+
+    // Validate attendance selection
+    if (!selectedAttendanceRadio) {
+      showFormFeedback("attendance", "Pilih konfirmasi kehadiran", "error");
+      isValid = false;
+    } else {
+      showFormFeedback("attendance", `Kehadiran: ${selectedAttendanceRadio.value}`, "success");
     }
 
     // Validate wish
@@ -437,7 +628,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   function showFormFeedback(fieldName, message, type) {
     const feedback = document.getElementById(`${fieldName}-feedback`);
+
+    // Check if feedback element exists
+    if (!feedback) {
+      console.warn(`Feedback element not found: ${fieldName}-feedback`);
+      return;
+    }
+
     const formGroup = feedback.closest(".form-group");
+
+    // Check if form group exists
+    if (!formGroup) {
+      console.warn(`Form group not found for feedback: ${fieldName}-feedback`);
+      return;
+    }
 
     feedback.textContent = message;
     feedback.classList.add("show", type);
@@ -461,7 +665,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
-  guestbookForm.addEventListener("submit", function (e) {
+  // Add event listener for attendance radios
+  const attendanceRadios = document.querySelectorAll('input[name="attendance"]');
+  attendanceRadios.forEach((r) => {
+    r.addEventListener("change", function () {
+      const attendanceFeedback = document.getElementById("attendance-feedback");
+      if (attendanceFeedback) {
+        attendanceFeedback.classList.remove("show", "success", "error");
+      }
+      if (this.checked) {
+        showFormFeedback("attendance", `Kehadiran: ${this.value}`, "success");
+      }
+    });
+  });
+
+  guestbookForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -470,38 +688,54 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const name = nameInput.value.trim();
     const wish = wishInput.value.trim();
+    const selectedAttendanceRadio = document.querySelector('input[name="attendance"]:checked');
+    const attendance = selectedAttendanceRadio ? selectedAttendanceRadio.value : "Ragu";
 
     // Show loading state
     submitBtn.classList.add("loading");
     submitBtn.disabled = true;
 
-    // Simulate API call delay
-    setTimeout(() => {
-      addNewWish(name, wish, "Hadir");
+    try {
+      // Call the async function and wait for it
+      await addNewWish(name, wish, attendance);
 
       // Show success state
       submitBtn.classList.remove("loading");
       submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> Terkirim!';
       submitBtn.style.background = "var(--color-gold)";
 
+      // Clear the wish input
+      wishInput.value = "";
+      wishInput.classList.remove("valid");
+
+      // Clear validation states for wish only
+      const ucapanFeedback = document.getElementById("ucapan-feedback");
+      if (ucapanFeedback) {
+        ucapanFeedback.classList.remove("show", "success", "error");
+      }
+      wishInput.closest(".form-group").classList.remove("success", "error");
+
+      // Show success message for the guest
+      showSuccessMessage(name, attendance);
+
+      // Reset button after delay
       setTimeout(() => {
         submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Ucapan';
         submitBtn.style.background = "";
         submitBtn.disabled = false;
       }, 2000);
+    } catch (error) {
+      // Handle error case
+      submitBtn.classList.remove("loading");
+      submitBtn.innerHTML = '<i class="fa-solid fa-exclamation-triangle"></i> Gagal Kirim';
+      submitBtn.style.background = "#e74c3c";
 
-      guestbookForm.reset();
-
-      // Clear validation states
-      nameInput.classList.remove("valid");
-      wishInput.classList.remove("valid");
-      document.querySelectorAll(".form-feedback").forEach((feedback) => {
-        feedback.classList.remove("show", "success", "error");
-      });
-      document.querySelectorAll(".form-group").forEach((group) => {
-        group.classList.remove("success", "error");
-      });
-    }, 1000);
+      setTimeout(() => {
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Ucapan';
+        submitBtn.style.background = "";
+        submitBtn.disabled = false;
+      }, 3000);
+    }
   });
 
   // Scroll Animations with Repeatable Effects
@@ -586,6 +820,92 @@ function copyToClipboard(text) {
   );
 }
 
+/**
+ * Show success message after form submission
+ */
+function showSuccessMessage(name, attendance) {
+  const successMessage = document.createElement("div");
+  successMessage.className = "success-toast";
+
+  let icon = "";
+  let color = "";
+  let message = "";
+
+  switch (attendance) {
+    case "Hadir":
+      icon = "✅";
+      color = "#27ae60";
+      message = `Terima kasih ${name}! Kami tunggu kehadiran Anda.`;
+      break;
+    case "Tidak Hadir":
+      icon = "❌";
+      color = "#e74c3c";
+      message = `Terima kasih ${name} atas konfirmasinya. Doa restu Anda sangat berarti.`;
+      break;
+    case "Ragu":
+      icon = "🤔";
+      color = "#f39c12";
+      message = `Terima kasih ${name}! Kami harap Anda bisa hadir.`;
+      break;
+  }
+
+  successMessage.innerHTML = `
+    <div class="toast-content">
+      <span class="toast-icon">${icon}</span>
+      <span class="toast-message">${message}</span>
+    </div>
+  `;
+
+  successMessage.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    color: ${color};
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    z-index: 10000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+    border-left: 4px solid ${color};
+  `;
+
+  document.body.appendChild(successMessage);
+
+  // Animate in
+  setTimeout(() => {
+    successMessage.style.transform = "translateX(0)";
+  }, 100);
+
+  // Animate out and remove
+  setTimeout(() => {
+    successMessage.style.transform = "translateX(100%)";
+    setTimeout(() => {
+      if (successMessage.parentNode) {
+        successMessage.parentNode.removeChild(successMessage);
+      }
+    }, 300);
+  }, 4000);
+}
+
+/**
+ * Update wishes display to show attendance status with better styling
+ */
+function getAttendanceStatusStyle(status) {
+  switch (status) {
+    case "Hadir":
+      return { color: "#27ae60", icon: "✅" };
+    case "Tidak Hadir":
+      return { color: "#e74c3c", icon: "❌" };
+    case "Ragu":
+      return { color: "#f39c12", icon: "🤔" };
+    default:
+      return { color: "var(--color-text)", icon: "👤" };
+  }
+}
+
 // Add to Calendar function
 function addToCalendar() {
   // Use dynamic data if available, otherwise use fallback
@@ -596,16 +916,19 @@ function addToCalendar() {
     const eventDate = new Date(eventData.religiousEvent.eventDate);
 
     // Convert to UTC for calendar
-    const startUTC = eventDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-    const endDate = new Date(eventDate.getTime() + 8 * 60 * 60 * 1000); // Add 8 hours
-    const endUTC = endDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    // Use Indonesia time (WIB, UTC+7), set as full day event
+    const year = eventDate.getFullYear();
+    const month = String(eventDate.getMonth() + 1).padStart(2, "0");
+    const day = String(eventDate.getDate()).padStart(2, "0");
+    const startLocal = `${year}${month}${day}`;
+    const endLocal = `${year}${month}${day}`;
 
     eventDetails = {
       title: generalInformation.title || `Wedding of ${getCoupleNames(partnerData)}`,
-      start: startUTC,
-      end: endUTC,
+      start: startLocal,
+      end: endLocal,
       description: `Join us for the wedding celebration of ${getCoupleNames(partnerData)}`,
-      location: eventData.religiousEvent.location || eventData.location.address,
+      location: eventData.location.googleMapsLink || eventData.religiousEvent.location || eventData.location.address,
     };
   } else {
     // Fallback data
@@ -614,7 +937,7 @@ function addToCalendar() {
       start: "20251115T020000Z", // 09:00 WIB = 02:00 UTC
       end: "20251115T080000Z", // 15:00 WIB = 08:00 UTC
       description: "Join us for the wedding celebration of Rara & Bima",
-      location: "Masjid Istiqlal & Balai Kartini, Jakarta",
+      location: "https://maps.app.goo.gl/u5mGAnW82kHh8A4c6",
     };
   }
 
@@ -659,4 +982,86 @@ function addToCalendar() {
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   }, 500);
+}
+
+/**
+ * Load comments from API
+ */
+async function loadCommentsFromAPI() {
+  if (isLoadingComments) return;
+
+  isLoadingComments = true;
+
+  // Show loading animation
+  showCommentsLoading();
+
+  try {
+    const comments = await window.invitationAPI.fetchComments();
+
+    // Transform API data to match our display format
+    allWishes = comments.map((comment) => ({
+      author: comment.name,
+      text: comment.commentText,
+      status: comment.status,
+      date: comment.createdAt,
+      id: comment.id,
+    }));
+
+    // Update pagination
+    totalPages = Math.ceil(allWishes.length / wishesPerPage);
+    currentPage = 1;
+
+    // Update display
+    displayWishes();
+    updatePagination();
+
+    console.log(`Loaded ${allWishes.length} comments from API`);
+  } catch (error) {
+    console.error("Error loading comments:", error);
+    // Show error message or keep existing mock data
+    showCommentsError();
+  } finally {
+    isLoadingComments = false;
+    hideCommentsLoading();
+  }
+}
+
+/**
+ * Show comments loading animation
+ */
+function showCommentsLoading() {
+  const wishesContainer = document.getElementById("wishes-list");
+  if (wishesContainer) {
+    wishesContainer.innerHTML = `
+      <div class="comments-loading">
+        <div class="loading-spinner-small">
+          <div class="spinner-heart">💕</div>
+        </div>
+        <p>Memuat ucapan...</p>
+      </div>
+    `;
+  }
+}
+
+/**
+ * Hide comments loading animation
+ */
+function hideCommentsLoading() {
+  // Loading will be hidden when displayWishes() is called
+}
+
+/**
+ * Show comments loading error
+ */
+function showCommentsError() {
+  const wishesContainer = document.getElementById("wishes-list");
+  if (wishesContainer) {
+    wishesContainer.innerHTML = `
+      <div class="comments-error">
+        <div class="error-icon">⚠️</div>
+        <p>Gagal memuat ucapan</p>
+        <button onclick="loadCommentsFromAPI()" class="retry-btn">Coba Lagi</button>
+      </div>
+    `;
+  }
 }

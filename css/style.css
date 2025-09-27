@@ -433,6 +433,7 @@ body::before {
 #main-invitation {
   display: none; /* Initially hidden */
   animation: fadeIn 1.5s ease;
+  padding-bottom: 100px; /* Ensure content doesn't get hidden behind navbar */
 }
 
 /* Save the Date Section */
@@ -1315,7 +1316,7 @@ body::before {
 
 .form-container {
   flex: 1;
-  padding: 2.5rem;
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(192, 160, 128, 0.2);
@@ -1336,9 +1337,14 @@ body::before {
 }
 .form-group {
   position: relative;
-  margin-bottom: 1.5rem;
+  padding-top: 1.5rem;
 }
-.form-group input,
+
+.form-group:first-child {
+  padding-top: 2rem;
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
 .form-group textarea {
   width: 100%;
   padding: 10px 0;
@@ -1352,20 +1358,23 @@ body::before {
   resize: vertical;
   min-height: 80px;
 }
-.form-group label {
+FRA .form-group label {
   position: absolute;
-  top: 10px;
+  top: 15px;
   left: 0;
   transition: all 0.2s ease-out;
   pointer-events: none;
 }
-.form-group input:focus + label,
-.form-group input:valid + label,
-.form-group input.valid + label,
+.form-group input[type="text"]:focus + label,
+.form-group input[type="text"]:valid + label,
+.form-group input[type="text"].valid + label,
+.form-group input[type="email"]:focus + label,
+.form-group input[type="email"]:valid + label,
+.form-group input[type="email"].valid + label,
 .form-group textarea:focus + label,
 .form-group textarea:valid + label,
 .form-group textarea.valid + label {
-  top: -15px;
+  top: -10px;
   font-size: 0.8rem;
   color: var(--color-gold);
 }
@@ -1432,12 +1441,14 @@ body::before {
 }
 
 /* Form validation styles */
-.form-group.success input,
+.form-group.success input[type="text"],
+.form-group.success input[type="email"],
 .form-group.success textarea {
   border-bottom-color: var(--color-gold);
 }
 
-.form-group.error input,
+.form-group.error input[type="text"],
+.form-group.error input[type="email"],
 .form-group.error textarea {
   border-bottom-color: #e74c3c;
 }
@@ -1459,6 +1470,151 @@ body::before {
 
 .form-feedback.error {
   color: #e74c3c;
+}
+
+/* Simple attendance group (new) */
+.attendance-group-simple {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.attendance-title {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.6rem;
+}
+.attendance-simple-options {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+.attendance-simple-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  user-select: none;
+  color: var(--color-text);
+  position: relative;
+}
+/* .attendance-simple-options input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-gold);
+  cursor: pointer;
+}
+.attendance-simple-options input[type="radio"]:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+.attendance-simple-options input[type="radio"]:checked + span {
+  font-weight: 600;
+  color: var(--color-gold);
+} */
+@media (max-width: 600px) {
+  .attendance-simple-options {
+    gap: 0.9rem;
+  }
+  .attendance-simple-options label {
+    font-size: 0.85rem;
+  }
+}
+
+/* Select dropdown styling for attendance - removed as per change request */
+
+/* Input hint styling */
+.input-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.3rem;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* Improve form layout and attendance options on mobile */
+@media (max-width: 768px) {
+  .form-and-wishes {
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .form-container,
+  .wishes-container {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+  }
+
+  .form-group {
+    padding-top: 1rem;
+  }
+
+  .form-group:first-child {
+    padding-top: 1.5rem;
+  }
+
+  .form-group select {
+    padding: 12px 2.5rem 12px 0;
+    font-size: 0.95rem;
+  }
+
+  /* .radio-custom {
+    width: 16px;
+    height: 16px;
+  } */
+
+  .attendance-label {
+    font-size: 0.9rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .input-hint {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container,
+  .wishes-container {
+    padding: 1rem 1rem 1.5rem 1rem;
+  }
+
+  .form-group {
+    padding-top: 0.8rem;
+  }
+
+  .form-group:first-child {
+    padding-top: 1.2rem;
+  }
+
+  .form-group select {
+    padding: 10px 2rem 10px 0;
+    font-size: 0.9rem;
+  }
+} /* Success Toast Styling */
+.success-toast {
+  font-family: "Poppins", sans-serif;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.toast-icon {
+  font-size: 1.2rem;
+}
+
+.toast-message {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 /* Loading state for submit button */
@@ -2318,18 +2474,178 @@ body::before {
   }
 }
 
-/* Footer */
-footer {
-  background-color: var(--color-dark-brown);
-  color: var(--color-cream);
-  padding: 4rem 1rem;
+/* Comments Loading States */
+.comments-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
   text-align: center;
-  background-image: url("https://www.transparenttextures.com/patterns/clean-gray-paper.png");
-  margin-bottom: 2rem;
 }
-footer h3 {
-  font-family: var(--font-heading);
+
+.loading-spinner-small {
+  margin-bottom: 1rem;
+}
+
+.spinner-heart {
+  font-size: 2rem;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.comments-loading p {
+  color: var(--color-text);
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.comments-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.comments-error .error-icon {
   font-size: 2rem;
   margin-bottom: 1rem;
+}
+
+.comments-error p {
+  color: var(--color-text);
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0 0 1rem 0;
+}
+
+.retry-btn {
+  background: var(--color-gold);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+  background: var(--color-secondary);
+  transform: translateY(-1px);
+}
+
+/* Enhanced Wish Display */
+.wish-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.wish-date {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.6;
+  font-weight: normal;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.wish-text {
+  margin: 0.5rem 0;
+  line-height: 1.4;
+  color: var(--color-text);
+}
+
+.wish-status {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .wish-header {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .wish-date {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+}
+
+/* Bank Account Icon Styling */
+.bank-account {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.bank-account i {
+  display: block;
+  margin: 0 auto 0.5rem auto;
+}
+
+.bank-account p {
+  margin: 0.5rem 0;
+}
+
+.bank-account strong {
+  font-size: 1.1rem;
+  color: var(--color-dark-brown);
+  font-weight: 600;
+}
+
+/* Footer Styling */
+footer {
+  text-align: center;
+  padding: 4rem 2rem 6rem 2rem; /* Increased bottom padding to avoid navbar overlap */
+  background: linear-gradient(135deg, rgba(245, 243, 240, 0.8) 0%, rgba(192, 160, 128, 0.1) 100%);
+  margin-top: 3rem;
+  border-top: 1px solid rgba(192, 160, 128, 0.2);
+}
+
+footer .closing-text {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+  font-style: italic;
+}
+
+footer h3 {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  color: var(--color-dark-brown);
+  margin: 1rem 0;
   font-weight: 700;
+}
+
+footer p:last-child {
+  color: var(--color-gold);
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  footer {
+    padding: 3rem 1.5rem 5rem 1.5rem; /* Increased bottom padding for mobile navbar */
+  }
+
+  footer .closing-text {
+    font-size: 1rem;
+  }
+
+  footer h3 {
+    font-size: 2rem;
+  }
+
+  footer p:last-child {
+    font-size: 1rem;
+  }
 }

@@ -1,6 +1,10 @@
 // API Configuration
-const API_BASE_URL = "https://wedding-api.fadhlih.com/api/v1/invitation";
+const API_BASE_URL = "https://wedding-api.fadhlih.com/api/v1";
+// const API_BASE_URL = "https://localhost:7077/api/v1";
+const INVITATION_BASE_URL = `${API_BASE_URL}/invitation`;
+const COMMENT_API_BASE_URL = `${API_BASE_URL}/comment`;
 const INVITATION_SLUG = "the-wedding-of-fadhlih-&-febiana";
+// const INVITATION_SLUG = "the-wedding-of-fadhlih-and-febiana";
 
 // Global variable to store invitation data
 let invitationData = null;
@@ -11,7 +15,7 @@ let invitationData = null;
  */
 async function fetchInvitationData() {
   try {
-    const response = await fetch(`${API_BASE_URL}/${INVITATION_SLUG}/all-data`, {
+    const response = await fetch(`${INVITATION_BASE_URL}/${INVITATION_SLUG}/all-data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,47 +49,49 @@ async function fetchInvitationData() {
 function getDefaultData() {
   return {
     generalInformation: {
-      title: "The Wedding of Rara & Bima",
-      date: "2025-11-15T09:00:00",
+      title: "The Wedding of Fadhlih & Febiana",
+      date: "2025-12-29T12:00:00",
       themeCode: "Wedding1",
     },
     coverOpening: {
       coverImage: "https://picsum.photos/1280/720?random=5",
       profileImage: "https://picsum.photos/400/400?random=10",
       openingTitle: "The Wedding Of",
-      openingSubTitle: "Rara & Bima",
+      openingSubTitle: "Fadhlih & Febiana",
       openingText: "Kepada Yth. Bapak/Ibu/Saudara/i",
     },
     partnerData: {
       man: {
-        fullName: "Bima Perkasa",
-        nickName: "Bima",
-        fatherName: "Drs. H. Muhammad Santoso",
-        motherName: "Hj. Siti Aminah",
+        fullName: "Fadhlih Girindra Putra",
+        nickName: "Fadhlih",
+        fatherName: "Parno",
+        motherName: "Nengsih",
+        orderChild: 1,
         imageUrl: "https://picsum.photos/1280/720?random=7",
       },
       woman: {
-        fullName: "Rara Putri",
-        nickName: "Rara",
-        fatherName: "I Gede Suhartana",
-        motherName: "Ni Wayan Sriasih",
+        fullName: "Febiana Ambar Lestari",
+        nickName: "Febiana",
+        fatherName: "Marijo",
+        motherName: "Heni",
+        orderChild: 2,
         imageUrl: "https://picsum.photos/1280/720?random=6",
       },
     },
     eventData: {
       religiousEvent: {
         name: "Akad Nikah",
-        eventDate: "2025-11-15T09:00:00",
-        startTime: "09.00",
-        endTime: "10.00",
-        location: "Masjid Istiqlal, Jakarta",
+        eventDate: "2025-12-29T12:00:00",
+        startTime: "12.00",
+        endTime: "Selesai",
+        location: "Jatipurno, Wonogiri",
       },
       celebrationEvent: {
         name: "Resepsi Pernikahan",
-        eventDate: "2025-11-15T12:00:00",
-        startTime: "12.00",
-        endTime: "15.00",
-        location: "Balai Kartini, Jakarta",
+        eventDate: "2025-12-30T07:00:00",
+        startTime: "07.00",
+        endTime: "Selesai",
+        location: "Jatipurno, Wonogiri",
       },
       verse: {
         verseTitle: "Allah Berfirman",
@@ -128,12 +134,12 @@ function getDefaultData() {
         {
           type: "BNI",
           number: "1234567890",
-          owner: "Rara Putri",
+          owner: "Febiana",
         },
         {
           type: "BCA",
           number: "0987654321",
-          owner: "Bima Perkasa",
+          owner: "Fadhlih",
         },
       ],
     },
@@ -181,7 +187,7 @@ function formatDate(dateString, format = "date") {
 function getCoupleNames(partnerData) {
   const manName = partnerData.man.nickName || partnerData.man.fullName;
   const womanName = partnerData.woman.nickName || partnerData.woman.fullName;
-  return `${womanName} & ${manName}`;
+  return `${manName} & ${womanName}`;
 }
 
 /**
@@ -492,6 +498,116 @@ async function initializeDynamicContent() {
   }
 }
 
+/**
+ * Fetch comments from API
+ * @returns {Promise<Array>} - Array of comments
+ */
+async function fetchComments() {
+  try {
+    const response = await fetch(`${COMMENT_API_BASE_URL}/get-by-invitation/${INVITATION_SLUG}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result.data && Array.isArray(result.data)) {
+      // Sort comments by creation date (newest first)
+      return result.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else {
+      console.warn("Invalid comment API response structure");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    // Return empty array on error - fallback to existing mock data if available
+    return [];
+  }
+}
+
+/**
+ * Post a new comment to API
+ * @param {Object} commentData - Comment data {name, status, commentText}
+ * @returns {Promise<Object>} - API response
+ */
+async function postComment(commentData) {
+  try {
+    const response = await fetch(`${COMMENT_API_BASE_URL}/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...commentData,
+        invitationSlug: INVITATION_SLUG,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error posting comment:", error);
+    throw error;
+  }
+}
+
+/**
+ * Format comment date for display
+ * @param {string} dateString - ISO date string from API
+ * @returns {string} - Formatted date
+ */
+function formatCommentDate(dateString) {
+  if (!dateString) {
+    return "Baru saja";
+  }
+
+  const date = new Date(dateString);
+  const now = new Date();
+
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return "Baru saja";
+  }
+
+  const diffInMilliseconds = now - date;
+  const diffInMinutes = diffInMilliseconds / (1000 * 60);
+  const diffInHours = diffInMinutes / 60;
+  const diffInDays = diffInHours / 24;
+
+  // Handle future dates (might happen due to server time differences)
+  if (diffInMilliseconds < 0) {
+    return "Baru saja";
+  }
+
+  if (diffInMinutes < 1) {
+    return "Baru saja";
+  } else if (diffInMinutes < 60) {
+    return `${Math.floor(diffInMinutes)} menit yang lalu`;
+  } else if (diffInHours < 24) {
+    return `${Math.floor(diffInHours)} jam yang lalu`;
+  } else if (diffInDays < 7) {
+    const days = Math.floor(diffInDays);
+    return days === 1 ? "1 hari yang lalu" : `${days} hari yang lalu`;
+  } else {
+    return date.toLocaleDateString("id-ID", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+}
+
 // Export functions for use in other files
 window.invitationAPI = {
   fetchInvitationData,
@@ -499,6 +615,9 @@ window.invitationAPI = {
   formatDate,
   getCoupleNames,
   getCountdownDate,
+  fetchComments,
+  postComment,
+  formatCommentDate,
 };
 
 // Make retry and fallback functions globally available

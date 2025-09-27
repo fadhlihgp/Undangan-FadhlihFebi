@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Invitation - Guest Access</title>
+
+    <script>
+      // Extract guest name from URL path and redirect to main invitation
+      function handleGuestAccess() {
+        const path = window.location.pathname;
+        const pathSegments = path.split("/").filter((segment) => segment.length > 0);
+
+        // If there's a path segment that could be a guest name
+        if (pathSegments.length > 0) {
+          const lastSegment = pathSegments[pathSegments.length - 1];
+
+          // Skip if it's a file or common paths
+          if (
+            lastSegment &&
+            !lastSegment.includes(".") &&
+            lastSegment !== "index" &&
+            lastSegment !== "guest" &&
+            lastSegment.length > 0
+          ) {
+            // Redirect to main page with guest parameter
+            const guestName = lastSegment;
+            window.location.replace(`/index.html?guest=${encodeURIComponent(guestName)}`);
+            return;
+          }
+        }
+
+        // If no valid guest name found, redirect to main page
+        window.location.replace("/index.html");
+      }
+
+      // Execute immediately
+      handleGuestAccess();
+    </script>
+  </head>
+  <body>
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+      ">
+      <div style="text-align: center">
+        <h2>Redirecting to Wedding Invitation...</h2>
+        <p>If you are not redirected automatically, <a href="/index.html">click here</a>.</p>
+      </div>
+    </div>
+  </body>
+</html>

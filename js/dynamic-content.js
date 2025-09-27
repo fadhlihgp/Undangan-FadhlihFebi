@@ -100,7 +100,7 @@ function updateMempelaiSection(data) {
     }
 
     // Update woman's profile (first profile)
-    const womanProfile = document.querySelector(".couple-profile:first-of-type");
+    const womanProfile = document.querySelector(".couple-profile:last-of-type");
     if (womanProfile && partnerData.woman) {
       const womanImg = womanProfile.querySelector("img");
       const womanName = womanProfile.querySelector(".couple-name");
@@ -116,12 +116,12 @@ function updateMempelaiSection(data) {
       }
 
       if (womanParents && partnerData.woman.fatherName && partnerData.woman.motherName) {
-        womanParents.innerHTML = `Putri dari Bapak ${partnerData.woman.fatherName}<br>& Ibu ${partnerData.woman.motherName}`;
+        womanParents.innerHTML = `Putri ke-${partnerData.woman.orderChild} dari Bapak ${partnerData.woman.fatherName}<br>& Ibu ${partnerData.woman.motherName}`;
       }
     }
 
     // Update man's profile (last profile)
-    const manProfile = document.querySelector(".couple-profile:last-of-type");
+    const manProfile = document.querySelector(".couple-profile:first-of-type");
     if (manProfile && partnerData.man) {
       const manImg = manProfile.querySelector("img");
       const manName = manProfile.querySelector(".couple-name");
@@ -137,7 +137,7 @@ function updateMempelaiSection(data) {
       }
 
       if (manParents && partnerData.man.fatherName && partnerData.man.motherName) {
-        manParents.innerHTML = `Putra dari Bapak ${partnerData.man.fatherName}<br>& Ibu ${partnerData.man.motherName}`;
+        manParents.innerHTML = `Putra ke-${partnerData.man.orderChild} dari Bapak ${partnerData.man.fatherName}<br>& Ibu ${partnerData.man.motherName}`;
       }
     }
 
@@ -417,14 +417,24 @@ function updateGallerySection(data) {
 function updateGiftSection(data) {
   try {
     const { gift } = data;
+    const giftSection = document.getElementById("hadiah");
+    const giftNavLink = document.querySelector('a[href="#hadiah"]');
 
     if (gift && gift.isShown && gift.gifts && gift.gifts.length > 0) {
+      // Show gift section and navbar link
+      if (giftSection) {
+        giftSection.style.display = "block";
+      }
+      if (giftNavLink) {
+        giftNavLink.parentElement.style.display = "block";
+      }
+
       const giftList = document.querySelector(".gift-list");
       if (giftList) {
         // Clear existing gifts
         giftList.innerHTML = "";
 
-        // Digital envelope card
+        // Create digital envelope card with generic icons
         const digitalGifts = gift.gifts.filter((g) => g.type && g.number);
         if (digitalGifts.length > 0) {
           let digitalHTML = `
@@ -432,13 +442,16 @@ function updateGiftSection(data) {
                             <h4>Amplop Digital</h4>
                     `;
 
-          digitalGifts.forEach((giftItem) => {
-            const bankLogoUrl = getBankLogoUrl(giftItem.type);
+          digitalGifts.forEach((giftItem, index) => {
+            const iconClass = index % 2 === 0 ? "fa-university" : "fa-credit-card";
             digitalHTML += `
-                            <img src="${bankLogoUrl}" alt="${giftItem.type} Logo">
-                            <p>No. Rek: ${giftItem.number}<br>a.n. ${giftItem.owner}
-                                <button onclick="copyToClipboard('${giftItem.number}')">Salin</button>
-                            </p>
+                            <div class="bank-account" ${index > 0 ? 'style="margin-top: 1.5rem;"' : ""}>
+                                <i class="fa-solid ${iconClass}" style="font-size: 2rem; color: var(--color-gold); margin-bottom: 0.5rem;"></i>
+                                <p><strong>${giftItem.type}</strong></p>
+                                <p>No. Rek: ${giftItem.number}<br>a.n. ${giftItem.owner}
+                                    <button onclick="copyToClipboard('${giftItem.number}')">Salin</button>
+                                </p>
+                            </div>
                         `;
           });
 
@@ -453,6 +466,14 @@ function updateGiftSection(data) {
             window.scrollAnimationObserver.observe(element);
           }
         });
+      }
+    } else {
+      // Hide gift section and navbar link when isShown is false
+      if (giftSection) {
+        giftSection.style.display = "none";
+      }
+      if (giftNavLink) {
+        giftNavLink.parentElement.style.display = "none";
       }
     }
   } catch (error) {

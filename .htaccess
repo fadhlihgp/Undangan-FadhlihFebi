@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Handle client-side routing for guest names
+# Redirect any path that doesn't exist to index.html with the path as a parameter
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/index\.html$
+RewriteCond %{REQUEST_URI} !^/$
+RewriteRule ^([^/.]+)/?$ /index.html?guest=$1 [QSA,L]
+
+# Optional: Redirect root to index.html
+DirectoryIndex index.html
